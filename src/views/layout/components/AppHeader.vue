@@ -13,14 +13,16 @@
         <!-- 18.1 用户头像使用 Avatar 组件 -->
         <el-avatar
           :size="30"
-          src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+          :src="userInfo.portrait || 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'"
         ></el-avatar>
         <i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item>用户信息</el-dropdown-item>
+        <el-dropdown-item>{{ userInfo.userName }}</el-dropdown-item>
+        <!-- 默认添加事件不会添加在当前元素上，需要加上.native 才能将事件添加到底层结构上 -->
         <el-dropdown-item
           divided
+          @click.native="handleLogout"
           >退出</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -28,8 +30,29 @@
 </template>
 
 <script>
+import { getUserInfo } from '@/services/user'
+
 export default {
-  name: 'AppHeader'
+  name: 'AppHeader',
+  created () {
+    // 加载用户信息
+    this.loadUserInfo()
+  },
+  data () {
+    return {
+      userInfo: null
+    }
+  },
+  methods: {
+    async loadUserInfo () {
+      const { data } = await getUserInfo()
+      this.userInfo = data.content
+    },
+    handleLogout () {
+      this.$store.commit('setUser', null)
+      this.$router.push('/login')
+    }
+  }
 }
 </script>
 

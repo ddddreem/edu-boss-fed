@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '@/store'
 
 Vue.use(VueRouter)
 
@@ -113,6 +114,24 @@ const routes = [
 
 const router = new VueRouter({
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  // 验证 to 路由是否需要进行身份认证
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // 验证 vuex 的 store 中是否存储了用户信息
+    if (!store.state.user) {
+      return next({
+        name: 'login',
+        query: {
+          // 降本次访问的完整路径传递给的登录页面，使得用户登录后可以条状到一开始访问的页面
+          redirect: to.fullPath
+        }
+      })
+    }
+    next()
+  }
+  next()
 })
 
 export default router

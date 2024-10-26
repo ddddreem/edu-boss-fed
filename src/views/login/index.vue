@@ -77,15 +77,16 @@ export default {
         // 可以使用 qs 模块，用来将对象装换为 urlencoded 格式（他人写的模块，需使用 npm 下载）
         // data: qs.stringify(this.from)
         // })
-        const data = await login(this.form)
+        const { data } = await login(this.form)
         this.isLoginLoading = false // 发送请求成功后，再将按钮设置为可点击
 
         if (data.state === 1) {
-          this.$router.push({
-            name: 'home'
-          })
           // 23 element 给Vue实例中注册了一个 $message 组件, 用来设置消息提示框
           this.$message.success(data.message)
+          // 将用户信息存储到 Vuex 中
+          this.$store.commit('setUser', data.content)
+          // 跳转上次访问的页面
+          this.$router.push(this.$route.query.redirect || '/')
         } else {
           this.$message.error(data.message)
         }
