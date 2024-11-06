@@ -30,24 +30,27 @@
 </template>
 
 <script>
-import { getUserInfo } from '@/services/user'
+// import { getUserInfo } from '@/services/user'
 
 export default {
   name: 'AppHeader',
   created () {
     // 加载用户信息
-    this.loadUserInfo()
+    // this.loadUserInfo()
   },
   data () {
     return {
-      userInfo: null
+      userInfo: {
+        portrait: null,
+        userName: 'test_user'
+      }
     }
   },
   methods: {
-    async loadUserInfo () {
-      const { data } = await getUserInfo()
-      this.userInfo = data.content
-    },
+    // async loadUserInfo () {
+    //   const { data } = await getUserInfo()
+    //   this.userInfo = data.content
+    // },
     handleLogout () {
       this.$store.commit('setUser', null)
       this.$router.push('/login')

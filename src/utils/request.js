@@ -9,21 +9,21 @@ const request = axios.create({
   timeout: 2000
 })
 
-// 判断请求的url地址，并动态加上基地址前缀
-function getBaseURL (url) {
-  return url.startWith('/boss') ? 'http://eduboss.lagou.com' : 'http://edufront.lagou.com'
-}
+// // 判断请求的url地址，并动态加上基地址前缀
+// function getBaseURL (url) {
+//   return url.startWith('/boss') ? 'http://eduboss.lagou.com' : 'http://edufront.lagou.com'
+// }
 
-// 拦截器，用来动态给请求添加基地址前缀
-request.interceptors.request.use(function (config) {
-  config.baseURL = getBaseURL(config.url)
-  const { user } = store.state
-  // 统一设置 Token 信息
-  if (user && user.access_auth) {
-    config.headers.Authorization = user.access_auth
-  }
-  return config
-})
+// // 拦截器，用来动态给请求添加基地址前缀
+// request.interceptors.request.use(function (config) {
+//   config.baseURL = getBaseURL(config.url)
+//   const { user } = store.state
+//   // 统一设置 Token 信息
+//   if (user && user.access_auth) {
+//     config.headers.Authorization = user.access_auth
+//   }
+//   return config
+// })
 
 // 跳转到登录页
 function redirectLogin () {
