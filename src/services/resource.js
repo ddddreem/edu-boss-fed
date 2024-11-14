@@ -33,3 +33,11 @@ export const deleteResource = id => {
     url: `/boss/resource/${id}`
   })
 }
+
+// 接口-根据资源id获取资源
+export const getResourceById = id => {
+  return request({
+    method: 'GET',
+    url: `/boss/resource/getResourceById/${id}`
+  })
+}

@@ -52,16 +52,24 @@
         </el-form>
       </div>
       <!-- 添加资源按钮 -->
-      <el-button @click="dialogFormVisible = true">添加新资源信息</el-button>
+      <el-button @click="handleAdd">添加新资源信息</el-button>
       <el-dialog :title="isEdit ? '编辑资源信息' : '新增资源信息'" :visible.sync="dialogFormVisible">
         <el-form :model="form">
-          <el-form-item label="活动名称" :label-width="formLabelWidth">
+          <el-form-item label="资源名称" :label-width="formLabelWidth">
             <el-input v-model="form.name" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="活动区域" :label-width="formLabelWidth">
-            <el-select v-model="form.region" placeholder="请选择活动区域">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+          <el-form-item label="资源路径" :label-width="formLabelWidth">
+            <el-input v-model="form.url" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="资源分类ID" :label-width="formLabelWidth">
+            <el-select v-model="form.categoryId" placeholder="请选择活动区域">
+              <el-option label="无" value=""></el-option>
+              <el-option
+                v-for="category in resourceCategories"
+                :key="category.id"
+                :label="category.name"
+                :value="category.id"
+              ></el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -132,7 +140,7 @@
 </template>
 
 <script>
-import { getResourcePages, getResourceCategories, deleteResource } from '@/services/resource'
+import { getResourcePages, getResourceCategories, deleteResource, getResourceById } from '@/services/resource'
 
 export default {
   name: 'ResourceList',
@@ -140,7 +148,10 @@ export default {
     return {
       // 用于存储资源列表数据
       resources: [
-        {}
+        { name: '测试资源1', url: '/test/01', description: 'test001', createdTime: new Date() },
+        { name: '测试资源2', url: '/test/02', description: 'test002', createdTime: new Date() },
+        { name: '测试资源3', url: '/test/03', description: 'test003', createdTime: new Date() },
+        { name: '测试资源4', url: '/test/04', description: 'test004', createdTime: new Date() }
       ],
       form: {
         // 当前显示的页号
@@ -220,8 +231,14 @@ export default {
       }
     },
     handleEdit (rowData) {
+      // 设置对话框标题
+      this.isEdit = true
       // 显示编辑对话框
       this.dialogFormVisible = true
+      const { data } = getResourceById(rowData.id)
+      if (data.code === '000000') {
+        this.from = data.data
+      }
     },
     async handleDelete (rowData) {
       const { data } = await deleteResource(rowData.id)
@@ -232,7 +249,8 @@ export default {
         this.loadResources()
       }
     },
-    showAddDialog () {
+    handleAdd () {
+      this.form = {}
       this.isEdit = false
       this.dialogFormVisible = true
     }
