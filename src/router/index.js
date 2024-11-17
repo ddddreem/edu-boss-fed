@@ -68,14 +68,21 @@ const routes = [
         path: '/menu/:id/edit',
         name: 'menu-edit',
         component: () => import(/* webpackChunkName: 'menu-edit' */'@/views/menu/edit')
+      },
+      // 分配菜单路由组件
+      {
+        path: '/role/:roleId/alloc-menu',
+        name: 'alloc-menu',
+        component: () => import(/* webpackChunkName: 'alloc-menu' */'@/views/role/alloc-menu'),
+        props: true // 是的子组件可以通过props来接受url中的数据
+      },
+      // 分配资源路由组件
+      {
+        path: '/role/:roleId/alloc-resource',
+        name: 'alloc-resource',
+        component: () => import(/* webpackChunkName: 'alloc-resource' */'@/views/role/alloc-resource'),
+        props: true
       }
-      // // 分配菜单路由组件
-      // {
-      //   path: '/role/:roleId/alloc-menu',
-      //   name: 'alloc-menu',
-      //   component: () => import(/* webpackChunkName: 'alloc-menu' */'@/views/role/alloc-menu'),
-      //   props: true
-      // },
       // // 添加课程组件
       // {
       //   path: '/course/create',

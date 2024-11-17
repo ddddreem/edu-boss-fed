@@ -57,6 +57,12 @@
               >分配菜单</el-button>
               <el-button
                 type="text"
+                @click="$router.push({
+                  name: 'alloc-resource',
+                  params: {
+                    roleId: scope.row.id
+                  }
+                })"
               >分配资源</el-button>
             </div>
             <div>
@@ -90,7 +96,7 @@
 </template>
 
 <script>
-import { getAllRoles } from '@/services/role'
+import { getAllRoles, deleteRoleById } from '@/services/role'
 import CreateOrEdit from './CreateOrEdit'
 
 export default {
@@ -134,8 +140,12 @@ export default {
       this.roleId = rowData.id
       this.dialogVisible = true
     },
-    handleDelete () {
-
+    async handleDelete (rowData) {
+      const { data } = await deleteRoleById(rowData.id)
+      if (data.code === '000000') {
+        this.loadAllRoles()
+        this.$message.success('删除成功...')
+      }
     },
     handleCancel () {
       this.dialogVisible = false

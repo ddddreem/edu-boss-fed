@@ -25,3 +25,43 @@ export const saveOrEditRole = data => {
     data
   })
 }
+
+// 接口-根据id删除指定的用户记录
+export const deleteRoleById = id => {
+  return request({
+    method: 'DELETE',
+    url: `/role/delete/${id}`
+  })
+}
+
+// 接口-根据用户id获取用户已经分配的菜单
+export const getRoleMenusById = id => {
+  return request({
+    method: 'GET',
+    url: `/role/alloc/${id}`
+  })
+}
+
+// 接口-根据用户id获取用户已经分配的资源
+export const getRoleResourcesById = id => {
+  return request({
+    method: 'GET',
+    url: `/role/allocresource/${id}`
+  })
+}
+
+// 接口-获取所有菜单
+export const getMenuNodeList = () => {
+  return request({
+    method: 'GET',
+    url: '/role/getAllMenus'
+  })
+}
+
+// 接口-获取所有资源
+export const getResourceNodeList = () => {
+  return request({
+    method: 'GET',
+    url: '/role/getAllResources'
+  })
+}
