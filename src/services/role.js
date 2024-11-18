@@ -65,3 +65,21 @@ export const getResourceNodeList = () => {
     url: '/role/getAllResources'
   })
 }
+
+// 接口-分配用户菜单
+export const allocateRoleMenus = data => {
+  return request({
+    method: 'POST',
+    url: '/role/allocRoleMenus',
+    data
+  })
+}
+
+// 接口-分配用户资源
+export const allocateRoleResources = data => {
+  return request({
+    method: 'POST',
+    url: '/role/allocRoleResources',
+    data
+  })
+}
