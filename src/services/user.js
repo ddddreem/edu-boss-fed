@@ -18,3 +18,18 @@ export const userInfo = () => {
     url: '/front/user/getInfo'
   })
 }
+
+export const getUserPages = data => {
+  return request({
+    method: 'POST',
+    url: '/user/getUserPages',
+    data
+  })
+}
+
+export const forbidUser = id => {
+  return request({
+    method: 'POST',
+    url: `/user/forbidUser/${id}`
+  })
+}

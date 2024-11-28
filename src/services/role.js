@@ -83,3 +83,20 @@ export const allocateRoleResources = data => {
     data
   })
 }
+
+// 接口-为用户分配角色
+export const allocateUserRoles = data => {
+  return request({
+    method: 'POST',
+    url: '/boss/role/allocateUserRoles',
+    data
+  })
+}
+
+// 接口-获取用户已分配的角色
+export const getUserRoles = id => {
+  return request({
+    method: 'GET',
+    url: `/boss/role/user/${id}`
+  })
+}
