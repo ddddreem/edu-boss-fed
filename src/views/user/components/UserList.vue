@@ -62,6 +62,10 @@
           prop="createTime"
           label="注册时间">
           <!-- 用户状态操作（服务端没有开放权限，只能演示） -->
+        >
+          <template slot-scope="scope">
+            <span> {{ scope.row.createdTime }}</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="name"
@@ -122,7 +126,10 @@ export default {
   data () {
     return {
       users: [
-        { id: 1, name: '用户1', phone: '12345678910', createdTime: new Date() }
+        { id: 1, name: '用户1', phone: '12345678910', createdTime: new Date() },
+        { id: 2, name: '用户1', phone: '12345678910', createdTime: new Date() },
+        { id: 3, name: '用户3', phone: '12345678910', createdTime: new Date() },
+        { id: 4, name: '用户4', phone: '12345678910', createdTime: new Date() }
       ],
       filterParams: {
         currentPage: 1,

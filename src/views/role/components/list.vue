@@ -38,7 +38,11 @@
         <el-table-column
           prop="createdTime"
           label="添加时间"
-        />
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.createdTime }}</span>
+          </template>
+        </el-table-column>
         <el-table-column
           label="操作"
           align="center"
@@ -114,7 +118,11 @@ export default {
       isEdit: false,
       isLoading: false,
       roles: [
-        { id: 1, name: 'test001', description: 'test0001', createdTime: new Date() }
+        { id: 1, name: 'test001', description: 'test0001', createdTime: '2024-10-04' },
+        { id: 2, name: 'test002', description: 'test0002', createdTime: new Date() },
+        { id: 3, name: 'test003', description: 'test0003', createdTime: new Date() },
+        { id: 4, name: 'test004', description: 'test0004', createdTime: new Date() },
+        { id: 5, name: 'test005', description: 'test0005', createdTime: new Date() }
       ]
     }
   },
