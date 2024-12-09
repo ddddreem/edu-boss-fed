@@ -1,5 +1,10 @@
 # edu-boss-fed
 
+- Project source: Lagou, front-end practice project
+- Practice purpose: consolidate the knowledge learned in the front-end and practice Vue.js framework-related operations
+- Learning schedule: front(Vue, React) -> server(java, Spring Boot, Spring Cloud) -> C Language -> Computer Basic(Review) -> Embedded(51MCU, Stm32)
+- Current progress: Vue
+
 ## Project setup
 ```
 npm install
