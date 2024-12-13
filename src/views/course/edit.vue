@@ -1,6 +1,6 @@
 <template>
   <div class="course-edit">
-    <create-or-edit :is-edit="true"></create-or-edit>
+    <create-or-edit :is-edit="true" :course-id="courseId"></create-or-edit>
   </div>
 </template>
 

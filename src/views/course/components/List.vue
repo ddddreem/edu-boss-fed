@@ -17,7 +17,7 @@
             <el-button @click="onSubmit" :disabled="isLoading">查询</el-button>
           </el-form-item>
         </el-form>
-        <el-button type="primary" height="180" @click="addOrEditCourse" icon="el-icon-plus">新建课程</el-button>
+        <el-button type="primary" height="180" @click="addOrEditCourse(-1)" icon="el-icon-plus">新建课程</el-button>
       </div>
       <el-table :data="courses" style="width: 100%" v-loading="isLoading">
         <el-table-column prop="id" label="ID" width="60">
@@ -109,8 +109,8 @@ export default {
     reloadCourseList () {
       this.initCourseList()
     },
-    addOrEditCourse (courseId = -1) {
-      if (courseId !== -1) {
+    addOrEditCourse (courseId) {
+      if (courseId === -1) {
         this.$router.push({
           name: 'course-create'
         })

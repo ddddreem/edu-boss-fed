@@ -3,7 +3,7 @@
     <div class="msg-header">
       <el-page-header @back="goBack" :content="isEdit ? '编辑课程' : '新增课程'">
       </el-page-header>
-      <el-button type="primary">保存</el-button>
+      <el-button type="primary" @click="handleSave">保存</el-button>
     </div>
     <el-card class="box-card">
       <!-- <div slot="header" class="clearfix">
@@ -125,7 +125,7 @@
               :inactive-value="0"></el-switch>
           </el-form-item>
           <el-form-item>
-            <el-button>取消</el-button>
+            <el-button @click="goBack">取消</el-button>
             <el-button type="primary" @click="handleSave">保存</el-button>
           </el-form-item>
         </div>
@@ -140,6 +140,9 @@
 </template>
 
 <script>
+import CourseImage from './CourseImage'
+import TextEditor from '@/components/text-editor'
+import { getCourseInfoById, saveOrEditCourse } from '@/services/course'
 
 export default {
   name: 'CreateOrEditCourse',
@@ -147,6 +150,19 @@ export default {
     isEdit: {
       type: Boolean,
       default: false
+    },
+    courseId: {
+      type: [Number, String],
+      default: -1
+    }
+  },
+  components: {
+    CourseImage,
+    TextEditor
+  },
+  created () {
+    if (this.courseId !== -1) {
+      this.getCourseInfo()
     }
   },
   data () {
@@ -186,8 +202,18 @@ export default {
         name: 'course'
       })
     },
-    handleSave () {
-      console.log('test')
+    async getCourseInfo () {
+      const { data } = getCourseInfoById(this.courseId)
+      if (data.code === '000000') {
+        this.course = data.data
+      }
+    },
+    async handleSave () {
+      const { data } = await saveOrEditCourse(this.form)
+      if (data === '000000') {
+        this.$message.success(this.isEdit ? '编辑' : '新增' + '课程成功...')
+        this.goBack()
+      }
     }
   }
 }
