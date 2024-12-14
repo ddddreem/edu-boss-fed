@@ -124,6 +124,14 @@ export default {
       }
       // this.$message.info(routeObj)
       // console.log(routeObj)
+    },
+    handleCourseContent (courseId) {
+      this.$router.push({
+        name: 'course-section',
+        params: {
+          courseId
+        }
+      })
     }
   }
 }
