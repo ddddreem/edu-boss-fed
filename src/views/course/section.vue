@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import { getSectionAndLesson, saveOrUpdateSection, saveOrUpdateLesson } from '@/services/course-section'
+
 export default {
   name: 'CourseSection',
   props: {
@@ -84,6 +86,53 @@ export default {
         }
       },
       isLoading: false
+    }
+  },
+  created () {
+    // // 组件创建后，请求章节和课时数据
+    // this.loadSection()
+  },
+  methods: {
+    async loadSection () {
+      this.isLoading = true
+      const { data } = await getSectionAndLesson(this.courseId)
+      if (data.code === '000000') {
+        this.sections = data.data
+      }
+      this.isLoading = false
+    },
+    // 节点拖拽处理函数
+    handleAllowDrop (draggingNode, dropNode, type) {
+      // - 规则1： 只能同级移动，type 不能为 'inner'
+      // - 规则2： 课时不能移动到其他章节中
+      return type !== 'inner' && draggingNode.data.sectionId === dropNode.data.sectionId
+    },
+    // 节点拖拽完毕后的处理函数
+    async handleNodeDrop (draggingNode, dropNode, type, event) {
+      this.isLoading = true
+      try {
+        // 由于有很多章节与课时，需要给每个章节与课时都进行最新的排序顺序的请求
+        await Promise.all(dropNode.parent.childNodes.map((item, index) => {
+          // 判断当前是章节还是课时，再给对应接口发送请求即可
+          if (draggingNode.data.sectionId) {
+            // 课时接口处理
+            return saveOrUpdateLesson({
+              id: item.data.id,
+              orderNum: index
+            })
+          } else {
+            // 章节接口处理
+            return saveOrUpdateSection({
+              id: item.data.id,
+              orderNum: index
+            })
+          }
+        }))
+        this.$message.success('数据更新成功')
+      } catch (err) {
+        this.$message.error('数据更新失败', err)
+      }
+      this.isLoading = false
     }
   }
 }
