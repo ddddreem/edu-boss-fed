@@ -80,91 +80,91 @@ export default {
       uploader.startUpload()
     },
     initUploader () {
-      // this.uploader = new window.AliyunUpload.Vod({
-      //   // 阿里账号ID，必须有值
-      //   userId: '1618139964448548',
-      //   // 上传到视频点播的地域，默认值为'cn-shanghai'，//eu-central-1，ap-southeast-1
-      //   region: '',
-      //   // 分片大小默认1 MB，不能小于100 KB
-      //   partSize: 1048576,
-      //   // 并行上传分片个数，默认5
-      //   parallel: 5,
-      //   // 网络原因失败时，重新上传次数，默认为3
-      //   retryCount: 3,
-      //   // 网络原因失败时，重新上传间隔时间，默认为2秒
-      //   retryDuration: 2,
-      //   // 开始上传
-      //   onUploadstarted: async uploadInfo => {
-      //     let uploadAddressAndAuth = null
-      //     // 检测是图片或视频
-      //     if (uploadInfo.isImage) {
-      //       // 图片处理
-      //       const { data } = await aliyunImageUploadAddressAndAuth()
-      //       if (data.code === '000000') {
-      //         uploadAddressAndAuth = data.data
-      //         this.imageURL = uploadAddressAndAuth.imageURL
-      //       }
-      //     } else {
-      //       // 视频处理
-      //       const { data } = await aliyunVideoUploadAddressAndAuth({
-      //         fileName: uploadInfo.file.name,
-      //         imageUrl: this.imageURL
-      //       })
-      //       if (data.code === '000000') {
-      //         uploadAddressAndAuth = data.data
-      //         this.videoId = data.data.videoId
-      //       }
-      //     }
-      //     // 设置凭证与地址
-      //     this.uploader.setUploadAuthAndAddress(
-      //       uploadInfo,
-      //       uploadAddressAndAuth.uploadAuth,
-      //       uploadAddressAndAuth.uploadAddress,
-      //       uploadAddressAndAuth.imageId || uploadAddressAndAuth.videoId
-      //     )
-      //     // 此步设置完毕，上传进度开始执行
-      //   },
-      //   // 文件上传成功
-      //   onUploadSucceed: function (uploadInfo) {
-      //   },
-      //   // 文件上传失败
-      //   onUploadFailed: function (uploadInfo, code, message) {
-      //   },
-      //   // 文件上传进度，单位：字节
-      //   onUploadProgress: (uploadInfo, totalSize, loadedPercent) => {
-      //     if (!uploadInfo.isImage) {
-      //       this.uploadPercent = Math.floor(loadedPercent * 100)
-      //     }
-      //   },
-      //   // 上传凭证超时
-      //   onUploadTokenExpired: function (uploadInfo) {
-      //   },
-      //   // 全部文件上传结束
-      //   onUploadEnd: async uploadInfo => {
-      //     this.isUploadSuccess = true
-      //     const lessonId = this.$route.query.lessonId
-      //     // 发送视频转码请求
-      //     const { data } = await aliyunVideoTranscode({
-      //       lessonId,
-      //       coverImageUrl: this.imageURL,
-      //       fileId: this.videoId,
-      //       fileName: this.$refs['video-file'].files[0].name
-      //     })
-      //     if (data.code === '000000') {
-      //       // 轮询转码进度
-      //       const timer = setInterval(async () => {
-      //         const { data } = await getAliyunTranscodePercent(lessonId)
-      //         if (data.code === '000000') {
-      //           if (data.data === 100) {
-      //             this.isTranscodeSuccess = true
-      //             this.$message.success('视频转码成功')
-      //             clearInterval(timer)
-      //           }
-      //         }
-      //       }, 1000)
-      //     }
-      //   }
-      // })
+      this.uploader = new window.AliyunUpload.Vod({
+        // 阿里账号ID，必须有值
+        userId: '1618139964448548',
+        // 上传到视频点播的地域，默认值为'cn-shanghai'，//eu-central-1，ap-southeast-1
+        region: '',
+        // 分片大小默认1 MB，不能小于100 KB
+        partSize: 1048576,
+        // 并行上传分片个数，默认5
+        parallel: 5,
+        // 网络原因失败时，重新上传次数，默认为3
+        retryCount: 3,
+        // 网络原因失败时，重新上传间隔时间，默认为2秒
+        retryDuration: 2,
+        // 开始上传
+        onUploadstarted: async uploadInfo => {
+          let uploadAddressAndAuth = null
+          // 检测是图片或视频
+          if (uploadInfo.isImage) {
+            // 图片处理
+            const { data } = await aliyunImageUploadAddressAndAuth()
+            if (data.code === '000000') {
+              uploadAddressAndAuth = data.data
+              this.imageURL = uploadAddressAndAuth.imageURL
+            }
+          } else {
+            // 视频处理
+            const { data } = await aliyunVideoUploadAddressAndAuth({
+              fileName: uploadInfo.file.name,
+              imageUrl: this.imageURL
+            })
+            if (data.code === '000000') {
+              uploadAddressAndAuth = data.data
+              this.videoId = data.data.videoId
+            }
+          }
+          // 设置凭证与地址
+          this.uploader.setUploadAuthAndAddress(
+            uploadInfo,
+            uploadAddressAndAuth.uploadAuth,
+            uploadAddressAndAuth.uploadAddress,
+            uploadAddressAndAuth.imageId || uploadAddressAndAuth.videoId
+          )
+          // 此步设置完毕，上传进度开始执行
+        },
+        // 文件上传成功
+        onUploadSucceed: function (uploadInfo) {
+        },
+        // 文件上传失败
+        onUploadFailed: function (uploadInfo, code, message) {
+        },
+        // 文件上传进度，单位：字节
+        onUploadProgress: (uploadInfo, totalSize, loadedPercent) => {
+          if (!uploadInfo.isImage) {
+            this.uploadPercent = Math.floor(loadedPercent * 100)
+          }
+        },
+        // 上传凭证超时
+        onUploadTokenExpired: function (uploadInfo) {
+        },
+        // 全部文件上传结束
+        onUploadEnd: async uploadInfo => {
+          this.isUploadSuccess = true
+          const lessonId = this.$route.query.lessonId
+          // 发送视频转码请求
+          const { data } = await aliyunVideoTranscode({
+            lessonId,
+            coverImageUrl: this.imageURL,
+            fileId: this.videoId,
+            fileName: this.$refs['video-file'].files[0].name
+          })
+          if (data.code === '000000') {
+            // 轮询转码进度
+            const timer = setInterval(async () => {
+              const { data } = await getAliyunTranscodePercent(lessonId)
+              if (data.code === '000000') {
+                if (data.data === 100) {
+                  this.isTranscodeSuccess = true
+                  this.$message.success('视频转码成功')
+                  clearInterval(timer)
+                }
+              }
+            }, 1000)
+          }
+        }
+      })
     }
   }
 }
