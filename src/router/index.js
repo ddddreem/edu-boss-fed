@@ -103,14 +103,14 @@ const routes = [
         name: 'course-section',
         component: () => import(/* webpackChunkName: 'course-section' */'@/views/course/section'),
         props: true
+      },
+      // 上传课时视频
+      {
+        path: '/course/:courseId/video',
+        name: 'course-video',
+        component: () => import(/* webpackChunkName: 'course-video' */'@/views/course/video'),
+        props: true
       }
-      // // 上传课时视频
-      // {
-      //   path: '/course/:courseId/video',
-      //   name: 'course-video',
-      //   component: () => import(/* webpackChunkName: 'course-video' */'@/views/course/video'),
-      //   props: true
-      // }
     ]
   },
   {

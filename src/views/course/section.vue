@@ -23,7 +23,9 @@
           <span v-if="data.sectionName" class="actions">
             <el-button>编辑</el-button>
             <el-button>添加课时</el-button>
-            <el-button>状态</el-button>
+            <el-button
+              @click="showStatusDialog(data)"
+            >状态</el-button>
           </span>
           <span v-else class="actions">
             <el-button>编辑</el-button>
@@ -38,16 +40,40 @@
                 }
               })"
             >上传视频</el-button>
-            <el-button>状态</el-button>
+            <el-button
+              @click="showStatusDialog(data)"
+            >状态</el-button>
           </span>
         </div>
       </el-tree>
+      <el-dialog title="提示" :visible.sync="dialogFormVisible" width="30%">
+        <div class="dialogBody">
+          <i class="el-icon-info"></i>
+          <span class="outer-span">当前状态：{{ showStatus == 0 ? '已隐藏' : showStatus == 1 ? '待更新' : '已更新' }}</span>
+          <div class="dialog-select">
+            <span>状态变更为：</span>
+            <el-select v-model="showStatus" placeholder="请选择">
+              <el-option label="已隐藏" value="0"></el-option>
+              <el-option label="待更新" value="1"></el-option>
+              <el-option label="已更新" value="2"></el-option>
+            </el-select>
+          </div>
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="updateSectionStatus">确 定</el-button>
+        </div>
+      </el-dialog>
+      <create-or-edit-chapter></create-or-edit-chapter>
+      <create-or-edit-lesson></create-or-edit-lesson>
     </el-card>
   </div>
 </template>
 
 <script>
 import { getSectionAndLesson, saveOrUpdateSection, saveOrUpdateLesson } from '@/services/course-section'
+import CreateOrEditChapter from './components/CreateOrEditChapter'
+import CreateOrEditLesson from './components/CreateOrEditLesson'
 
 export default {
   name: 'CourseSection',
@@ -56,6 +82,10 @@ export default {
       type: [Number, String],
       required: true
     }
+  },
+  components: {
+    CreateOrEditChapter,
+    CreateOrEditLesson
   },
   data () {
     return {
@@ -85,7 +115,11 @@ export default {
           return data.sectionName || data.theme
         }
       },
-      isLoading: false
+      isLoading: false,
+      // 显示状态对话框
+      dialogFormVisible: false,
+      showSectionId: -1,
+      showStatus: 0
     }
   },
   created () {
@@ -101,11 +135,31 @@ export default {
       }
       this.isLoading = false
     },
+    goBack () {
+      this.$router.push({
+        name: 'course'
+      })
+    },
     // 节点拖拽处理函数
     handleAllowDrop (draggingNode, dropNode, type) {
       // - 规则1： 只能同级移动，type 不能为 'inner'
       // - 规则2： 课时不能移动到其他章节中
       return type !== 'inner' && draggingNode.data.sectionId === dropNode.data.sectionId
+    },
+    showStatusDialog (data) {
+      this.dialogFormVisible = true
+      this.showStatus = data.status
+      this.showSectionId = data.id
+    },
+    async updateSectionStatus () {
+      const { data } = await saveOrUpdateSection({
+        sectionId: this.showSectionId,
+        status: this.showStatus
+      })
+      if (data.code === '000000') {
+        this.$message.success('阶段状态更新成功...')
+        this.dialogFormVisible = false
+      }
     },
     // 节点拖拽完毕后的处理函数
     async handleNodeDrop (draggingNode, dropNode, type, event) {
@@ -158,5 +212,20 @@ export default {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 10px;
+}
+
+.dialogBody {
+  display: flex;
+  height: 10%;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 10px;
+  .outer-span {
+    font-size: large;
+  }
+  i {
+    font-size: xx-large;
+  }
 }
 </style>
